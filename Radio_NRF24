@@ -1,0 +1,76 @@
+#include <SPI.h>
+#include "nRF24L01.h"
+#include "RF24.h"
+#include "printf.h"
+
+#define TAMANO_DIR 3 // Coloca el valor al tamaño de la dirección 
+#define RETRIES_COUNT 15 // Número de intentos de comunicación
+#define RETRIES_DELAY 250 // Timepo entre cada intento para enviar datos
+#define CANALES 126 // Número de canales a utilizar
+#define REPS_SCAN 50 // Número de repeticiones al escanear el canal
+#define VELOCIDAD_DATA RF24_2MBPS // Velocidad de datos 
+#define BYTES_ENVIAR 4 // Máximo de bytes a enviar
+
+RF24 Receptor (9,10); //Inicializa chip enable y chip select
+const uint32 Pipes[2]={0xFFFFA0, 0xFFFFB0}; // Direcciones de tuberías
+
+void Configuracion()
+{
+    const int Interfencia[CANALES]; // Índice de interferencia
+    const byte Canal_Actual; // Variable conde se guarda el canal actual de comunicación
+
+    Receptor.setAddressWidth(TAMANO_DIR); // Configura el tamaño al valor de elección (linea 6)
+    Receptor.setRetries(RETRIES_DELAY, RETRIES_COUNT); // Configura la velocidad de cada uno de los intentos y cuantos intentos serán
+    Receptor.setAutoAck(true); // Activa el ack (Confirmación de respuesta)
+    Receptor.enableAckPayload(); // Permite variar la carga de datos a enviar
+    Receptor.setPayLoadSize(BYTES_ENVIAR); // Configura el máximo de bytes a enviar
+    Receptor.setPALevel(RF24_PA_MAX); // Configura la potencia de transmición al máximo
+    Receptor.setDataRate(VELOCIDAD_DATA); // Configura la velocidad de datos
+    memset(Interfencia, 0, sizeof(Interferencia)); // Limpia los valores de interfencia 
+    
+    Receptor.setChannel(1); // Selección el canal
+    Canal_Actual=Receptor.getChannel(); // Obtiene el canal de configuración actual
+    Serial.print("Este es el canal actual: "); // Imprime el canal
+    Serial.println(Canal_Actual); // Imprime el canal
+    
+    Receptor.begin(); // Inicia el módulo
+
+
+    /*while (REPS_SCAN--)
+    {
+        int i = CANALES;
+
+        while (i--)
+        {
+            Receptor.setChannel(i); // Selección el canal
+            Receptor.startListening();  // Escucha por un momento
+            delayMicroseconds(128);
+            Receptor.stopListening(); // Deja de escuchar
+            
+            if ( Receptor.testCarrier()) // Tenemos o no interfencia en el canal
+            {
+                ++Interfencia[i]; // Agrega 1 a la interfencia 
+            }
+        }
+    }*/
+
+}
+
+struct Leer_Control_Remoto()
+{
+    Receptor.openWritingPipe(Pipes[1]); // Abre la dirección de la tubería para comenzar a escribir
+    Receptor.openReadingPipe(1,Pipes[0]); // Abre el pipe para comenzar aleer
+    Receptor.startListening(); // Empieza a escuchar
+}
+
+void steup()
+{
+
+
+}
+
+void loop()
+{
+
+
+}
