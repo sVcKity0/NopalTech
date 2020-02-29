@@ -56,7 +56,7 @@ void Configuracion()
 
 }
 
-struct Leer_Control_Remoto()
+Leer_Control_Remoto()
 {
     Receptor.openWritingPipe(Pipes[1]); // Abre la dirección de la tubería para comenzar a escribir
     Receptor.openReadingPipe(1,Pipes[0]); // Abre el pipe para comenzar aleer
