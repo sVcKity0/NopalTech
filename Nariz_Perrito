@@ -1,3 +1,5 @@
+/* Programa para controlar el Joystick analógico en el eje (x) y (y) en grados */
+
 #define JOY_X A5
 #define JOY_Y A4
 
