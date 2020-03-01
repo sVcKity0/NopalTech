@@ -1,0 +1,35 @@
+#define JOY_X A5
+#define JOY_Y A4
+
+
+struct Posicion {
+  byte Pos_X;
+  byte Pos_Y;
+};
+
+struct Valor{
+  int Pos_X;
+  int Pos_Y;
+};
+
+Posicion Movimiento;
+Valor Lecturas;
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+
+
+    Lecturas.Pos_X = analogRead(JOY_X);
+
+    
+ 
+      if(analogRead(JOY_X)<490){
+            Serial.print("El robot se va a mover: "); Serial.print(((Lecturas.Pos_X/Lecturas.Pos_X)-1)+((Lecturas.Pos_X/1024)*90)); Serial.println(" en el eje X");
+      }else{
+        
+      }
+
+}
