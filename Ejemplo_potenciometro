@@ -1,8 +1,24 @@
-\\Programa de ejemplo de transmisor + potenciometro
+//Programa de ejemplo de transmisor + potenciometro
 
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
+
+#define JOY_X A5
+#define JOY_Y A4
+
+struct Posicion {
+  byte Pos_X;
+  byte Pos_Y;
+};
+
+struct Valor{
+  int Pos_X;
+  int Pos_Y;
+};
+
+Posicion Movimiento;
+Valor Lecturas;
 
 RF24 transmisor(9, 10);
 
@@ -12,6 +28,7 @@ boolean buttonState = 0;
 void setup() {
 
   transmisor.begin();
+  Serial.begin(9600);
   
   transmisor.openWritingPipe(direccion[0]);
   transmisor.setPALevel(RF24_PA_MAX);
@@ -19,14 +36,19 @@ void setup() {
 }
 void loop() {
   
-  delay(5);
+    byte Angulo = (Lecturas.Pos_X*180)/279;
+    Lecturas.Pos_X = analogRead(JOY_X);
+
+            Serial.print("El robot se va a mover: "); 
+           // Serial.println(Lecturas.Pos_X);
+                   
+            Serial.print(Angulo); 
+            Serial.println(" en el eje X");
+  
   transmisor.stopListening();
   
-  int Potenciometro = analogRead(A0);
-  int Angulo = map(Potenciometro, 0, 1023, 0, 180);
   transmisor.write(&Angulo, sizeof(Angulo));
 }
-
 ==============================================================================================================================
 \\Programa de ejemplo de receptor + servo
 
